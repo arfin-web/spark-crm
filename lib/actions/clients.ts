@@ -126,6 +126,10 @@ export async function getClients(params: {
   };
 }
 
+export async function getAllClients() {
+  return MOCK_CLIENTS.map(c => ({ id: c.id, name: c.name }));
+}
+
 export async function getClientById(id: string) {
   return MOCK_CLIENTS.find((c) => c.id === id) || null;
 }

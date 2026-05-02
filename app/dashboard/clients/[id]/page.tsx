@@ -38,7 +38,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
         </div>
 
         <div className="lg:col-span-2 space-y-8">
-          <ClientProjects />
+          <ClientProjects client={client} />
           <ClientActivities />
         </div>
       </div>
