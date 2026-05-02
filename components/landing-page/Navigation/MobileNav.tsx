@@ -46,7 +46,7 @@ export function MobileNav({ links }: MobileNavProps) {
           </SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-6 py-8">
-          <nav className="flex flex-col gap-4">
+          <nav className="flex flex-col justify-center items-center gap-4">
             {links.map((link) => (
               <Link
                 key={link.name}
@@ -60,11 +60,15 @@ export function MobileNav({ links }: MobileNavProps) {
           </nav>
           <hr className="border-border" />
           <div className="flex flex-col gap-3">
-            <Button variant="outline" className="w-full justify-center" render={<Link href="/login" onClick={() => setOpen(false)} />}>
-              Login
+            <Button variant="outline" className="w-full justify-center">
+              <Link href="/login">
+                Login
+              </Link>
             </Button>
-            <Button className="w-full justify-center rounded-full" render={<Link href="/signup" onClick={() => setOpen(false)} />}>
-              Get Started
+            <Button className="w-full justify-center rounded-full">
+              <Link href="/signup">
+                Get Started
+              </Link>
             </Button>
           </div>
         </div>
