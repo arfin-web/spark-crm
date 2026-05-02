@@ -26,11 +26,9 @@ export function MobileNav({ links }: MobileNavProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-6 w-6" />
-          <span className="sr-only">Toggle menu</span>
-        </Button>
+      <SheetTrigger render={<Button variant="ghost" size="icon" className="md:hidden" />}>
+        <Menu className="h-6 w-6" />
+        <span className="sr-only">Toggle menu</span>
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col">
         <SheetHeader className="text-left">
@@ -62,11 +60,11 @@ export function MobileNav({ links }: MobileNavProps) {
           </nav>
           <hr className="border-border" />
           <div className="flex flex-col gap-3">
-            <Button variant="outline" className="w-full justify-center" asChild>
-              <Link href="/login" onClick={() => setOpen(false)}>Login</Link>
+            <Button variant="outline" className="w-full justify-center" render={<Link href="/login" onClick={() => setOpen(false)} />}>
+              Login
             </Button>
-            <Button className="w-full justify-center rounded-full" asChild>
-              <Link href="/signup" onClick={() => setOpen(false)}>Get Started</Link>
+            <Button className="w-full justify-center rounded-full" render={<Link href="/signup" onClick={() => setOpen(false)} />}>
+              Get Started
             </Button>
           </div>
         </div>

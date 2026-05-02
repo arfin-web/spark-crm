@@ -34,7 +34,7 @@ export function FAQ() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold font-heading mb-12 text-center">Frequently Asked Questions</h2>
-          <Accordion type="single" collapsible className="w-full space-y-4">
+          <Accordion className="w-full space-y-4">
             {faqs.map((faq, i) => (
               <AccordionItem key={i} value={`item-${i}`} className="border border-border/50 rounded-xl px-4 overflow-hidden">
                 <AccordionTrigger className="text-left font-bold hover:no-underline py-4">

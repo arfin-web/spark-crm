@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function LogoCloud() {
   const logos = [
     { name: "Vortex Design", logo: "https://placehold.co/200x80/transparent/94a3b8?text=Vortex" },
@@ -16,12 +18,14 @@ export function LogoCloud() {
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-70">
           {logos.map((logo) => (
-            <img
-              key={logo.name}
-              src={logo.logo}
-              alt={logo.name}
-              className="h-8 w-auto grayscale transition-all hover:grayscale-0 hover:opacity-100"
-            />
+            <div key={logo.name} className="relative h-8 w-32 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+              <Image
+                src={logo.logo}
+                alt={logo.name}
+                fill
+                className="object-contain"
+              />
+            </div>
           ))}
         </div>
       </div>

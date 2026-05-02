@@ -41,10 +41,14 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-4">
             <Button variant="ghost" size="sm">
-              <Link href="/login">Login</Link>
+              <Link href="/login">
+                Login
+              </Link>
             </Button>
             <Button size="sm" className="rounded-full px-6 shadow-md shadow-primary/10">
-              <Link href="/signup">Get Started</Link>
+              <Link href="/signup">
+                Get Started
+              </Link>
             </Button>
           </div>
 
