@@ -2,15 +2,16 @@ import { Activity as ActivityIcon, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getActivities } from "@/lib/actions/activities";
-import { ActivityTimeline } from "@/components/dashboard/activities/ActivityTimeline";
-import { ActivityLogDialog } from "@/components/dashboard/activities/ActivityLogDialog";
+import { ActivityTimeline } from "../../activities/ActivityTimeline";
+import { ActivityLogDialog } from "../../activities/ActivityLogDialog";
 
-interface ClientActivitiesProps {
-  clientId: string;
+interface ProjectActivitiesProps {
+  projectId: string;
+  clientId?: string;
 }
 
-export async function ClientActivities({ clientId }: ClientActivitiesProps) {
-  const activities = await getActivities({ client_id: clientId, limit: 10 });
+export async function ProjectActivities({ projectId, clientId }: ProjectActivitiesProps) {
+  const activities = await getActivities({ project_id: projectId, limit: 10 });
 
   return (
     <Card className="border-border shadow-sm rounded-3xl overflow-hidden">
@@ -18,9 +19,10 @@ export async function ClientActivities({ clientId }: ClientActivitiesProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ActivityIcon className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg font-bold">Activity History</CardTitle>
+            <CardTitle className="text-lg font-bold">Project Timeline</CardTitle>
           </div>
-          <ActivityLogDialog
+          <ActivityLogDialog 
+            projectId={projectId} 
             clientId={clientId}
             trigger={
               <Button variant="outline" size="sm" className="rounded-xl border-primary/20 text-primary hover:bg-primary/5 gap-1.5 h-8">

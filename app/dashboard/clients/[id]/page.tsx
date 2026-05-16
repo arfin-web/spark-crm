@@ -39,7 +39,7 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
 
         <div className="lg:col-span-2 space-y-8">
           <ClientProjects client={client} />
-          <ClientActivities />
+          <ClientActivities clientId={client.id} />
         </div>
       </div>
     </div>
