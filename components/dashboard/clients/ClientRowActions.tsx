@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MoreHorizontal, ExternalLink, Trash2 } from "lucide-react";
+import { MoreHorizontal, ExternalLink, Trash2, CirclePlus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +30,10 @@ export function ClientRowActions({ client }: ClientRowActionsProps) {
             <DropdownMenuItem className="cursor-pointer" render={<Link href={`/dashboard/clients/${client.id}`} className="flex items-center" />}>
               <ExternalLink className="mr-2 h-4 w-4" />
               View Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" render={<Link href={`/dashboard/projects/new?client=${client.id}`} className="flex items-center" />}>
+              <CirclePlus className="mr-2 h-4 w-4" />
+              Assign Project
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
