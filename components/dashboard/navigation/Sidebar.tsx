@@ -10,7 +10,8 @@ import {
   KanbanSquare,
   FileText,
   Activity,
-  Sparkles
+  Sparkles,
+  Settings
 } from "lucide-react";
 import { LogoutButton } from "./LogoutButton";
 
@@ -21,6 +22,7 @@ const navItems = [
   { name: "Pipeline", href: "/dashboard/pipeline", icon: KanbanSquare },
   { name: "Proposals", href: "/dashboard/proposals", icon: FileText },
   { name: "Activities", href: "/dashboard/activities", icon: Activity },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 export function Sidebar() {
