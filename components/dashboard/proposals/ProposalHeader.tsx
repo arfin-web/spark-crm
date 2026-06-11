@@ -2,7 +2,8 @@ import Link from "next/link";
 import { ChevronLeft, Send, CheckCircle2, XCircle, RefreshCw, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProposalStatusBadge } from "./ProposalStatusBadge";
-import { Proposal } from "@/lib/actions/proposals";
+import { Proposal } from "@/app/actions/proposals";
+import { formatDate } from "@/lib/utils";
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -27,10 +28,10 @@ export function ProposalHeader({ proposal }: ProposalHeaderProps) {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold font-heading tracking-tight text-foreground">{proposal.title}</h1>
-              <ProposalStatusBadge status={proposal.status} />
+              <ProposalStatusBadge status={proposal.status as any} />
             </div>
             <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-              <span>Created {new Date(proposal.created_at).toLocaleDateString()}</span>
+              <span>Created {formatDate(proposal.created_at)}</span>
               <span>•</span>
               <span className="flex items-center gap-1">
                 {proposal.ai_generated ? "AI Generated" : "Manual Draft"}

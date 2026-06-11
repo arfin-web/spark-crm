@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, ArrowRight } from "lucide-react";
+import { Loader2, ArrowRight, AlertCircle } from "lucide-react";
+import { registerAction } from "@/app/actions/session";
 
 const signupSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
@@ -28,6 +29,7 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 export function SignupForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -43,28 +45,21 @@ export function SignupForm() {
 
   async function onSubmit(data: SignupFormValues) {
     setIsLoading(true);
+    setError(null);
 
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const payload = {
+      await registerAction({
+        email: data.email,
+        password: data.password,
         first_name: data.firstName,
         last_name: data.lastName,
         agency_name: data.agencyName,
-        email: data.email,
-        password: data.password, // In real app, this would be hashed on backend
-        subscription_tier: "trial",
-        subscription_status: "active",
-        created_at: new Date().toISOString(),
-      };
-
-      console.log("Signup submitted:", payload);
-
-      // Simulate account creation success
-      router.push("/login?signup=success");
-    } catch (error) {
-      console.error("Signup failed:", error);
+      });
+      // registerAction logs in automatically after registration
+      router.push("/dashboard");
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -78,6 +73,13 @@ export function SignupForm() {
           Join 500+ agencies managing leads with Spark CRM.
         </p>
       </div>
+
+      {error && (
+        <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
@@ -128,6 +130,7 @@ export function SignupForm() {
             id="email"
             placeholder="name@agency.com"
             type="email"
+            autoComplete="email"
             disabled={isLoading}
             {...form.register("email")}
             className={form.formState.errors.email ? "border-destructive focus-visible:ring-destructive" : ""}
@@ -143,6 +146,7 @@ export function SignupForm() {
             id="password"
             placeholder="••••••••"
             type="password"
+            autoComplete="new-password"
             disabled={isLoading}
             {...form.register("password")}
             className={form.formState.errors.password ? "border-destructive focus-visible:ring-destructive" : ""}
@@ -163,6 +167,9 @@ export function SignupForm() {
             className="text-xs text-muted-foreground leading-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             By creating an account, you agree to our{" "}
+            <Link href="/terms" className="text-primary hover:underline font-medium">Terms of Service</Link>
+            {" "}and{" "}
+            <Link href="/privacy" className="text-primary hover:underline font-medium">Privacy Policy</Link>.
           </Label>
         </div>
         {form.formState.errors.terms && (
@@ -190,11 +197,6 @@ export function SignupForm() {
           Sign In
         </Link>
       </p>
-
-      <div className="flex justify-center items-center gap-x-2">
-        <Link href="/terms" className="text-primary hover:underline font-medium">Terms of Service</Link>
-        <Link href="/privacy" className="text-primary hover:underline font-medium">Privacy Policy</Link>.
-      </div>
     </div>
   );
 }

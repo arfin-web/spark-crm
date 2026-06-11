@@ -1,6 +1,6 @@
 import { Building2, Briefcase, DollarSign, Clock, Download, Share2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Proposal } from "@/lib/actions/proposals";
+import { Proposal } from "@/app/actions/proposals";
 import { Button } from "@/components/ui/button";
 
 interface ProposalSidebarProps {
@@ -31,18 +31,18 @@ export function ProposalSidebar({ proposal }: ProposalSidebarProps) {
               </div>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Client</p>
-                <p className="text-sm font-bold text-foreground">{proposal.client_name || "N/A"}</p>
+                <p className="text-sm font-bold text-foreground">{proposal.client_id || "N/A"}</p>
               </div>
             </div>
 
-            {proposal.project_name && (
+            {proposal.project_id && (
               <div className="flex items-start gap-3">
                 <div className="mt-1 bg-primary/10 p-1.5 rounded-lg">
                   <Briefcase className="h-4 w-4 text-primary" />
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Project</p>
-                  <p className="text-sm font-bold text-foreground">{proposal.project_name}</p>
+                  <p className="text-sm font-bold text-foreground">{proposal.project_id}</p>
                 </div>
               </div>
             )}
@@ -53,7 +53,7 @@ export function ProposalSidebar({ proposal }: ProposalSidebarProps) {
               </div>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Investment</p>
-                <p className="text-sm font-bold text-foreground">{formatCurrency(proposal.cost)}</p>
+                <p className="text-sm font-bold text-foreground">{formatCurrency(Number(proposal.cost) || 0)}</p>
               </div>
             </div>
 

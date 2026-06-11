@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertCircle } from "lucide-react";
+import { loginAction } from "@/app/actions/session";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -23,6 +24,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -35,20 +37,17 @@ export function LoginForm() {
 
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true);
+    setError(null);
 
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log("Login submitted:", data);
-
-      // Simulate JWT token storage
-      const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_token_data";
-      localStorage.setItem("spark_auth_token", dummyToken);
-
+      await loginAction({
+        username: data.email,
+        password: data.password,
+      });
       router.push("/dashboard");
-    } catch (error) {
-      console.error("Login failed:", error);
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message || "Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
     }
@@ -63,6 +62,13 @@ export function LoginForm() {
         </p>
       </div>
 
+      {error && (
+        <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email address</Label>
@@ -70,6 +76,7 @@ export function LoginForm() {
             id="email"
             placeholder="name@agency.com"
             type="email"
+            autoComplete="email"
             disabled={isLoading}
             {...form.register("email")}
             className={form.formState.errors.email ? "border-destructive focus-visible:ring-destructive" : ""}
@@ -82,17 +89,12 @@ export function LoginForm() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link
-              href="/forgot-password"
-              className="text-xs font-medium text-primary hover:underline"
-            >
-              Forgot password?
-            </Link>
           </div>
           <Input
             id="password"
             placeholder="••••••••"
             type="password"
+            autoComplete="current-password"
             disabled={isLoading}
             {...form.register("password")}
             className={form.formState.errors.password ? "border-destructive focus-visible:ring-destructive" : ""}
@@ -123,17 +125,6 @@ export function LoginForm() {
           )}
         </Button>
       </form>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
 
       <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}

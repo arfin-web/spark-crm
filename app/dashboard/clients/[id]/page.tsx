@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getClientById } from "@/lib/actions/clients";
+import { getClientById } from "@/app/actions/clients";
 import { ClientHeader } from "@/components/dashboard/clients/details/ClientHeader";
 import { ClientInfo } from "@/components/dashboard/clients/details/ClientInfo";
 import { ClientActionTiles } from "@/components/dashboard/clients/details/ClientActionTiles";

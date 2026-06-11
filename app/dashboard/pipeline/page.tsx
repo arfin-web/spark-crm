@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getProjects } from "@/lib/actions/projects";
+import { getProjects } from "@/app/actions/projects";
 import { KanbanBoard } from "@/components/dashboard/pipeline/KanbanBoard";
 
 export const metadata: Metadata = {

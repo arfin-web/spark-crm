@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { logActivity, ActivityType } from "@/lib/actions/activities";
+import { logActivity, ActivityType } from "@/app/actions/activities";
 
 const activitySchema = z.object({
   type: z.enum(["email", "call", "meeting", "proposal", "note"]),

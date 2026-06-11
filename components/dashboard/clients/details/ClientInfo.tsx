@@ -1,7 +1,7 @@
 import { Mail, Phone, Tags } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Client } from "@/lib/actions/clients";
+import { Client } from "@/app/actions/clients";
 import { cn } from "@/lib/utils";
 
 interface ClientInfoProps {

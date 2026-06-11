@@ -1,6 +1,6 @@
 import { DollarSign, Clock, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Project } from "@/lib/actions/projects";
+import { Project } from "@/app/actions/projects";
 
 interface ProjectInfoProps {
   project: Project;
@@ -33,7 +33,7 @@ export function ProjectInfo({ project }: ProjectInfoProps) {
                 <DollarSign className="h-4 w-4" />
                 <span className="text-xs font-bold uppercase tracking-wider">Budget</span>
               </div>
-              <p className="text-xl font-bold text-foreground">{formatCurrency(project.budget)}</p>
+              <p className="text-xl font-bold text-foreground">{formatCurrency(Number(project.budget) || 0)}</p>
             </div>
             <div className="bg-muted/50 p-4 rounded-xl space-y-1">
               <div className="flex items-center gap-2 text-muted-foreground">

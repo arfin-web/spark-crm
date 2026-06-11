@@ -5,7 +5,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Building2, Calendar, DollarSign } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Project } from "@/lib/actions/projects";
+import { Project } from "@/app/actions/projects";
+import { formatDate } from "@/lib/utils";
 
 interface KanbanCardProps {
   project: Project;
@@ -70,18 +71,18 @@ export function KanbanCard({ project }: KanbanCardProps) {
           </Link>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Building2 className="h-3 w-3" />
-            <span className="line-clamp-1">{project.client_name || "N/A"}</span>
+            <span className="line-clamp-1">{project.client_id || "N/A"}</span>
           </div>
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-border/50">
           <div className="flex items-center gap-1 font-bold text-xs text-foreground">
             <DollarSign className="h-3 w-3 text-muted-foreground" />
-            {formatCurrency(project.budget)}
+            {formatCurrency(Number(project.budget) || 0)}
           </div>
           <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
             <Calendar className="h-3 w-3" />
-            {project.end_date ? new Date(project.end_date).toLocaleDateString() : "No date"}
+            {project.end_date ? formatDate(project.end_date) : "No date"}
           </div>
         </div>
       </CardContent>

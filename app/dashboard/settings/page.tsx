@@ -5,7 +5,7 @@ import { ProfileSettings } from "@/components/dashboard/settings/ProfileSettings
 import { PreferenceSettings } from "@/components/dashboard/settings/PreferenceSettings";
 import { DataSettings } from "@/components/dashboard/settings/DataSettings";
 import { APIKeySettings } from "@/components/dashboard/settings/APIKeySettings";
-import { getUserProfile } from "@/lib/actions/settings";
+import { getUserProfile } from "@/app/actions/settings";
 
 export const metadata: Metadata = {
   title: "Settings | Spark CRM",

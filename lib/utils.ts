@@ -4,3 +4,30 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+/**
+ * Format a date string or Date object to a consistent, locale-safe string.
+ * Always uses "en-US" to prevent server/client hydration mismatches.
+ */
+export function formatDate(date: string | Date | null | undefined): string {
+  if (!date) return "N/A";
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+/**
+ * Format a date+time string or Date object to a consistent, locale-safe string.
+ * Always uses "en-US" to prevent server/client hydration mismatches.
+ */
+export function formatDateTime(date: string | Date | null | undefined): string {
+  if (!date) return "N/A";
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}

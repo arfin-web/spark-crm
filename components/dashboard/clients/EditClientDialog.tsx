@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { updateClient, Client } from "@/lib/actions/clients";
+import { updateClient, Client } from "@/app/actions/clients";
 import { ClientForm, ClientFormValues } from "./ClientForm";
 
 interface EditClientDialogProps {

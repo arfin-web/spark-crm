@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Proposal } from "@/lib/actions/proposals";
+import { Proposal } from "@/app/actions/proposals";
 
 interface ProposalContentProps {
   proposal: Proposal;

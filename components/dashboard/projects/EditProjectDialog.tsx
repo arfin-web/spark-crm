@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { updateProject, Project } from "@/lib/actions/projects";
+import { updateProject, Project } from "@/app/actions/projects";
 import { ProjectForm, ProjectFormValues } from "./ProjectForm";
 
 interface EditProjectDialogProps {

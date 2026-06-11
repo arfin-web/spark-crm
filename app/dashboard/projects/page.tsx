@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { getProjects } from "@/lib/actions/projects";
-import { getAllClients } from "@/lib/actions/clients";
+import { getProjects } from "@/app/actions/projects";
+import { getAllClients } from "@/app/actions/clients";
 import { ProjectsList } from "@/components/dashboard/projects/ProjectsList";
 import { AddProjectDialog } from "@/components/dashboard/projects/AddProjectDialog";
 

@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-import { ProposalStatus } from "@/lib/actions/proposals";
+import { ProposalStatus } from "@/app/actions/proposals";
 
 interface ProposalStatusBadgeProps {
-  status: ProposalStatus;
+  status: string | undefined;
 }
 
 export function ProposalStatusBadge({ status }: ProposalStatusBadgeProps) {

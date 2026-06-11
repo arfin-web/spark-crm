@@ -4,7 +4,7 @@ import { Briefcase, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AddProjectDialog } from "../../projects/AddProjectDialog";
-import { Client } from "@/lib/actions/clients";
+import { Client } from "@/app/actions/clients";
 
 interface ClientProjectsProps {
   client: Client;

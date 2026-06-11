@@ -1,7 +1,7 @@
 import { Activity as ActivityIcon, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getActivities } from "@/lib/actions/activities";
+import { getActivities } from "@/app/actions/activities";
 import { ActivityTimeline } from "../../activities/ActivityTimeline";
 import { ActivityLogDialog } from "../../activities/ActivityLogDialog";
 

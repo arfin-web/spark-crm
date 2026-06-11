@@ -2,12 +2,12 @@
 
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { Project, ProjectStatus } from "@/lib/actions/projects";
+import { Project, ProjectStatus } from "@/app/actions/projects";
 import { KanbanCard } from "./KanbanCard";
 import { cn } from "@/lib/utils";
 
 interface KanbanColumnProps {
-  id: ProjectStatus;
+  id: string;
   title: string;
   projects: Project[];
 }
@@ -17,13 +17,13 @@ export function KanbanColumn({ id, title, projects }: KanbanColumnProps) {
     id,
   });
 
-  const getStatusColor = (status: ProjectStatus) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case "prospect": return "bg-muted text-muted-foreground";
-      case "proposal_sent": return "bg-amber-500/10 text-amber-500";
-      case "in_progress": return "bg-blue-500/10 text-blue-500";
-      case "completed": return "bg-emerald-500/10 text-emerald-500";
-      case "paused": return "bg-destructive/10 text-destructive";
+      case "prospect": return "bg-muted text-muted-foreground" as any;
+      case "proposal_sent": return "bg-amber-500/10 text-amber-500" as any;
+      case "in_progress": return "bg-blue-500/10 text-blue-500" as any;
+      case "completed": return "bg-green-500/10 text-green-500";
+      case "paused": return "bg-destructive/10 text-destructive" as any;
       default: return "";
     }
   };
@@ -35,7 +35,7 @@ export function KanbanColumn({ id, title, projects }: KanbanColumnProps) {
           <h3 className="font-bold text-sm text-foreground uppercase tracking-wider">{title}</h3>
           <span className={cn(
             "px-2 py-0.5 rounded-full text-[10px] font-bold",
-            getStatusColor(id)
+            getStatusColor(id as any)
           )}>
             {projects.length}
           </span>

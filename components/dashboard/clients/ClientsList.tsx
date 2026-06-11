@@ -2,23 +2,27 @@ import {
   Mail,
   Building2,
   Heart,
-  Filter
+  Filter,
 } from "lucide-react";
+
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
+
 import { Button } from "@/components/ui/button";
-import { Client } from "@/lib/actions/clients";
+import { Client } from "@/app/actions/clients";
 import { cn } from "@/lib/utils";
+
 import { ClientSearch } from "./ClientSearch";
 import { ClientPagination } from "./ClientPagination";
 import { ClientStatusBadge } from "./ClientStatusBadge";
 import { ClientRowActions } from "./ClientRowActions";
+import { ClientLastContactDate } from "./ClientLastContactDate";
 
 interface ClientsListProps {
   clients: Client[];
@@ -28,24 +32,29 @@ interface ClientsListProps {
 }
 
 export function ClientsList({
-  clients,
+  clients = [],
   totalCount,
   totalPages,
-  currentPage
+  currentPage,
 }: ClientsListProps) {
-  const getHealthColor = (score: number) => {
+  const getHealthColor = (score?: number) => {
+    if (!score) return "text-muted-foreground";
     if (score >= 80) return "text-emerald-500";
     if (score >= 60) return "text-amber-500";
     return "text-destructive";
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <ClientSearch />
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Button variant="outline" size="sm" className="h-10 rounded-xl border-border bg-card">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-10 rounded-xl border-border bg-card"
+          >
             <Filter className="mr-2 h-4 w-4" />
             Filters
           </Button>
@@ -56,55 +65,92 @@ export function ClientsList({
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow className="hover:bg-transparent border-border">
-              <TableHead className="font-bold text-foreground">Name</TableHead>
-              <TableHead className="font-bold text-foreground">Company</TableHead>
-              <TableHead className="font-bold text-foreground">Status</TableHead>
-              <TableHead className="font-bold text-foreground">Health</TableHead>
-              <TableHead className="font-bold text-foreground">Last Contact</TableHead>
-              <TableHead className="text-right font-bold text-foreground">Actions</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Company</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Health</TableHead>
+              <TableHead>Last Contact</TableHead>
+              <TableHead className="text-right">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {clients.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-32 text-center text-muted-foreground italic border-none">
+                <TableCell
+                  colSpan={6}
+                  className="h-32 text-center text-muted-foreground"
+                >
                   No clients found.
                 </TableCell>
               </TableRow>
             ) : (
               clients.map((client) => (
-                <TableRow key={client.id} className="hover:bg-muted/20 transition-colors border-border">
+                <TableRow
+                  key={client.id}
+                  className="hover:bg-muted/20"
+                >
                   <TableCell>
                     <div className="flex flex-col">
-                      <span className="font-bold text-foreground">{client.name}</span>
+                      <span className="font-semibold">
+                        {client.name ?? "Unnamed"}
+                      </span>
+
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Mail className="h-3 w-3" />
-                        {client.email}
+                        {client.email ?? "-"}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Building2 className="h-4 w-4" />
-                      {client.company_name || "N/A"}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <ClientStatusBadge status={client.status} />
-                  </TableCell>
+
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Heart className={cn("h-4 w-4", getHealthColor(client.health_score))} fill="currentColor" />
-                      <span className={cn("font-bold text-sm", getHealthColor(client.health_score))}>
-                        {client.health_score}
+                      <Building2 className="h-4 w-4" />
+
+                      {(client as any).company_name ??
+                        "N/A"}
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    {(client as any).status ? (
+                      <ClientStatusBadge
+                        status={(client as any).status}
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Heart
+                        className={cn(
+                          "h-4 w-4",
+                          getHealthColor(
+                            (client as any).health_score
+                          )
+                        )}
+                        fill="currentColor"
+                      />
+
+                      <span
+                        className={cn(
+                          getHealthColor(
+                            (client as any).health_score
+                          )
+                        )}
+                      >
+                        {(client as any).health_score ??
+                          "-"}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {client.last_contact_date
-                      ? new Date(client.last_contact_date).toLocaleDateString()
-                      : "Never"}
-                  </TableCell>
+
+                  <ClientLastContactDate client={client} />
+
                   <TableCell className="text-right">
                     <ClientRowActions client={client} />
                   </TableCell>

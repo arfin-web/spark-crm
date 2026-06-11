@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ProposalStatus } from "@/lib/actions/proposals";
+import { ProposalStatus } from "@/app/actions/proposals";
 
 export const proposalSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),

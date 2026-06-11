@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getProposals } from "@/lib/actions/proposals";
+import { getProposals } from "@/app/actions/proposals";
 import { ProposalTable } from "@/components/dashboard/proposals/ProposalTable";
 import { Button } from "@/components/ui/button";
 import { Plus, Search, Filter } from "lucide-react";

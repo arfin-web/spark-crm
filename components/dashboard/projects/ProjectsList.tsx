@@ -1,8 +1,8 @@
-import { 
-  Building2, 
-  Calendar, 
-  DollarSign, 
-  Filter 
+import {
+  Building2,
+  Calendar,
+  DollarSign,
+  Filter
 } from "lucide-react";
 import {
   Table,
@@ -13,7 +13,8 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Project } from "@/lib/actions/projects";
+import { Project } from "@/app/actions/projects";
+import { formatDate } from "@/lib/utils";
 import { ProjectSearch } from "./ProjectSearch";
 import { ProjectPagination } from "./ProjectPagination";
 import { ProjectStatusBadge } from "./ProjectStatusBadge";
@@ -89,34 +90,36 @@ export function ProjectsList({
                   <TableCell>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Building2 className="h-4 w-4" />
-                      {project.client_name || "N/A"}
+                      {project.client_id || "N/A"}
                     </div>
                   </TableCell>
                   <TableCell>
-                    <ProjectStatusBadge status={project.status} />
+                    <ProjectStatusBadge status={project.status as any} />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1 font-medium text-foreground">
                       <DollarSign className="h-3 w-3 text-muted-foreground" />
-                      {formatCurrency(project.budget)}
+                      {formatCurrency(Number(project.budget) || 0)}
                     </div>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     <div className="flex flex-col">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        {project.start_date ? new Date(project.start_date).toLocaleDateString() : "TBD"}
+                        {project.start_date ? formatDate(project.start_date) : "TBD"}
                       </span>
                       {project.end_date && (
                         <span className="text-[10px] ml-4 text-muted-foreground/70">
-                          to {new Date(project.end_date).toLocaleDateString()}
+                          to {formatDate(project.end_date)}
                         </span>
                       )}
                     </div>
                   </TableCell>
+
                   <TableCell className="text-right">
                     <ProjectRowActions project={project} clients={clients} />
                   </TableCell>
+
                 </TableRow>
               ))
             )}

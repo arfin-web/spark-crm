@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-import { ProjectStatus } from "@/lib/actions/projects";
+import { ProjectStatus } from "@/app/actions/projects";
 
 interface ProjectStatusBadgeProps {
-  status: ProjectStatus;
+  status: string | undefined;
 }
 
 export function ProjectStatusBadge({ status }: ProjectStatusBadgeProps) {

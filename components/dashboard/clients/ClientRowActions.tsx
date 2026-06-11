@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Client } from "@/lib/actions/clients";
+import { Client } from "@/app/actions/clients";
 
 interface ClientRowActionsProps {
   client: Client;

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getActivities } from "@/lib/actions/activities";
+import { getActivities } from "@/app/actions/activities";
 import { ActivityTimeline } from "@/components/dashboard/activities/ActivityTimeline";
 import { ActivityLogDialog } from "@/components/dashboard/activities/ActivityLogDialog";
 import { Search, Filter, History } from "lucide-react";

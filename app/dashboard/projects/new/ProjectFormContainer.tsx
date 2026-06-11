@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { ProjectForm, ProjectFormValues } from "@/components/dashboard/projects/ProjectForm";
-import { createProject } from "@/lib/actions/projects";
+import { createProject } from "@/app/actions/projects";
 
 interface ProjectFormContainerProps {
   clients: { id: string; name: string }[];
@@ -18,7 +18,7 @@ export function ProjectFormContainer({ clients, defaultClientId }: ProjectFormCo
     setIsPending(true);
     try {
       const result = await createProject(values);
-      if (result.success) {
+      if (result) {
         router.push("/dashboard/projects");
         router.refresh();
       }

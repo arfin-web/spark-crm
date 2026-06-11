@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getClients } from "@/lib/actions/clients";
+import { getClients } from "@/app/actions/clients";
 import { ClientsList } from "@/components/dashboard/clients/ClientsList";
 import { AddClientDialog } from "@/components/dashboard/clients/AddClientDialog";
 
@@ -23,8 +23,8 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   const status = params.status || "all";
 
   const { data, total, totalPages } = await getClients({
-    query,
-    status,
+    query: query || undefined,
+    status: status !== "all" ? status : undefined,
     page,
     limit: 10,
   });
@@ -39,11 +39,11 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
         <AddClientDialog />
       </div>
 
-      <ClientsList 
-        clients={data} 
-        totalCount={total} 
-        totalPages={totalPages} 
-        currentPage={page} 
+      <ClientsList
+        clients={data}
+        totalCount={total}
+        totalPages={totalPages}
+        currentPage={page}
       />
     </div>
   );

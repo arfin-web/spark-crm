@@ -20,14 +20,14 @@ import {
 } from "@dnd-kit/sortable";
 import { KanbanColumn } from "./KanbanColumn";
 import { KanbanCard } from "./KanbanCard";
-import { Project, ProjectStatus, updateProject } from "@/lib/actions/projects";
+import { Project, ProjectStatus, updateProject } from "@/app/actions/projects";
 import { createPortal } from "react-dom";
 
 interface KanbanBoardProps {
   initialProjects: Project[];
 }
 
-const COLUMNS: { id: ProjectStatus; title: string }[] = [
+const COLUMNS: { id: string; title: string }[] = [
   { id: "prospect", title: "Prospect" },
   { id: "proposal_sent", title: "Proposal Sent" },
   { id: "in_progress", title: "In Progress" },

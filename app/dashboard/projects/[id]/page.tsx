@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProjectById } from "@/lib/actions/projects";
-import { getClientById, getAllClients } from "@/lib/actions/clients";
+import { getProjectById } from "@/app/actions/projects";
+import { getClientById, getAllClients } from "@/app/actions/clients";
 import { ProjectHeader } from "@/components/dashboard/projects/details/ProjectHeader";
 import { ProjectInfo } from "@/components/dashboard/projects/details/ProjectInfo";
 import { ProjectClientCard } from "@/components/dashboard/projects/details/ProjectClientCard";

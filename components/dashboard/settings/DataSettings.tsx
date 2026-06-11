@@ -14,7 +14,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { deleteAccount } from "@/lib/actions/settings";
+import { deleteAccount } from "@/app/actions/settings";
 
 export function DataSettings() {
   const [isExporting, setIsExporting] = React.useState(false);

@@ -2,8 +2,9 @@ import Link from "next/link";
 import { ChevronLeft, Calendar, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProjectStatusBadge } from "../ProjectStatusBadge";
-import { Project } from "@/lib/actions/projects";
+import { Project } from "@/app/actions/projects";
 import { EditProjectDialog } from "../EditProjectDialog";
+import { formatDate } from "@/lib/utils";
 
 interface ProjectHeaderProps {
   project: Project;
@@ -29,17 +30,17 @@ export function ProjectHeader({ project, clients }: ProjectHeaderProps) {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-3xl font-bold font-heading tracking-tight text-foreground">{project.name}</h1>
-              <ProjectStatusBadge status={project.status} />
+              <ProjectStatusBadge status={project.status as any} />
             </div>
             <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                {project.start_date ? new Date(project.start_date).toLocaleDateString() : "No start date"}
+                {project.start_date ? formatDate(project.start_date) : "No start date"}
               </span>
               {project.end_date && (
                 <span className="flex items-center gap-1">
                   <span>→</span>
-                  {new Date(project.end_date).toLocaleDateString()}
+                  {formatDate(project.end_date)}
                 </span>
               )}
             </div>

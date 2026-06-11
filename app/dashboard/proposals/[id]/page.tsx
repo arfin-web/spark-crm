@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProposalById } from "@/lib/actions/proposals";
+import { getProposalById } from "@/app/actions/proposals";
 import { ProposalHeader } from "@/components/dashboard/proposals/ProposalHeader";
 import { ProposalContent } from "@/components/dashboard/proposals/ProposalContent";
 import { ProposalSidebar } from "@/components/dashboard/proposals/ProposalSidebar";

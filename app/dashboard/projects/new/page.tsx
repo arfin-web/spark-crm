@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { getAllClients } from "@/lib/actions/clients";
+import { getAllClients } from "@/app/actions/clients";
 import { ProjectFormContainer } from "./ProjectFormContainer";
 
 export const metadata: Metadata = {

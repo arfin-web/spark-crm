@@ -3,7 +3,7 @@ import { ChevronLeft, Building2, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ClientStatusBadge } from "../ClientStatusBadge";
 import { EditClientDialog } from "../EditClientDialog";
-import { Client } from "@/lib/actions/clients";
+import { Client } from "@/app/actions/clients";
 
 interface ClientHeaderProps {
   client: Client;
@@ -28,7 +28,7 @@ export function ClientHeader({ client }: ClientHeaderProps) {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-3xl font-bold font-heading tracking-tight text-foreground">{client.name}</h1>
-              <ClientStatusBadge status={client.status} />
+              <ClientStatusBadge status={client.status as any} />
             </div>
             <p className="text-muted-foreground flex items-center gap-2 mt-1">
               <Building2 className="h-4 w-4" />

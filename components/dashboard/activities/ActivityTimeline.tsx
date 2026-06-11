@@ -6,8 +6,8 @@ import {
   StickyNote, 
   Clock 
 } from "lucide-react";
-import { Activity, ActivityType } from "@/lib/actions/activities";
-import { cn } from "@/lib/utils";
+import { Activity, ActivityType } from "@/app/actions/activities";
+import { cn, formatDateTime } from "@/lib/utils";
 
 interface ActivityTimelineProps {
   activities: Activity[];
@@ -48,19 +48,14 @@ export function ActivityTimeline({ activities, className }: ActivityTimelineProp
       {activities.map((activity, index) => (
         <div key={activity.id} className="relative flex items-start gap-4 animate-in fade-in slide-in-from-left-4 duration-500" style={{ animationDelay: `${index * 100}ms` }}>
           <div className="sticky top-0 z-10 flex items-center justify-center bg-background ring-4 ring-background rounded-full">
-            <ActivityIcon type={activity.type} />
+            <ActivityIcon type={activity.type as ActivityType} />
           </div>
           
           <div className="flex-1 min-w-0 bg-card border border-border p-4 rounded-2xl shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center justify-between gap-4 mb-1">
               <h4 className="text-sm font-bold text-foreground truncate">{activity.title}</h4>
               <time className="text-[10px] font-medium text-muted-foreground whitespace-nowrap bg-muted/50 px-2 py-0.5 rounded-full uppercase">
-                {new Date(activity.created_at).toLocaleDateString(undefined, { 
-                  month: 'short', 
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
+                {formatDateTime(activity.created_at)}
               </time>
             </div>
             
@@ -68,16 +63,16 @@ export function ActivityTimeline({ activities, className }: ActivityTimelineProp
               {activity.description}
             </p>
 
-            {(activity.client_name || activity.project_name) && (
+            {(activity.client_id || activity.project_id) && (
               <div className="mt-3 pt-3 border-t border-border/50 flex flex-wrap gap-2">
-                {activity.client_name && (
+                {activity.client_id && (
                   <span className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-wider">
-                    {activity.client_name}
+                    {activity.client_id}
                   </span>
                 )}
-                {activity.project_name && (
+                {activity.project_id && (
                   <span className="text-[10px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded uppercase tracking-wider">
-                    {activity.project_name}
+                    {activity.project_id}
                   </span>
                 )}
               </div>

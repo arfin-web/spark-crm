@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { updateAgencyName, UserProfile } from "@/lib/actions/settings";
+import { updateAgencyName, UserProfile } from "@/app/actions/settings";
 
 const profileSchema = z.object({
   agency_name: z.string().min(2, "Agency name must be at least 2 characters"),

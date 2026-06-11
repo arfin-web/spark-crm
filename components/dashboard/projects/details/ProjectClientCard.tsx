@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Building2, Mail, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Client } from "@/lib/actions/clients";
+import { Client } from "@/app/actions/clients";
 
 interface ProjectClientCardProps {
   client: Client;

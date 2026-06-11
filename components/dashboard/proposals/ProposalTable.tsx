@@ -31,8 +31,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Proposal } from "@/lib/actions/proposals";
+import { Proposal } from "@/app/actions/proposals";
 import { ProposalStatusBadge } from "./ProposalStatusBadge";
+import { formatDate } from "@/lib/utils";
 
 interface ProposalTableProps {
   proposals: Proposal[];
@@ -88,29 +89,29 @@ export function ProposalTable({ proposals }: ProposalTableProps) {
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Building2 className="h-3.5 w-3.5" />
-                      {proposal.client_name || "N/A"}
+                      {proposal.client_id || "N/A"}
                     </div>
-                    {proposal.project_name && (
+                    {proposal.project_id && (
                       <div className="flex items-center gap-2 text-[11px] text-muted-foreground/70">
                         <Briefcase className="h-3 w-3" />
-                        {proposal.project_name}
+                        {proposal.project_id}
                       </div>
                     )}
                   </div>
                 </TableCell>
                 <TableCell>
-                  <ProposalStatusBadge status={proposal.status} />
+                  <ProposalStatusBadge status={proposal.status as any} />
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1 font-medium text-foreground">
                     <DollarSign className="h-3 w-3 text-muted-foreground" />
-                    {formatCurrency(proposal.cost)}
+                    {formatCurrency(Number(proposal.cost) || 0)}
                   </div>
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    {new Date(proposal.created_at).toLocaleDateString()}
+                    {formatDate(proposal.created_at)}
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
