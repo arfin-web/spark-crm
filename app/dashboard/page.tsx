@@ -1,12 +1,71 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles, Users, Briefcase, Activity } from "lucide-react";
+import { getClients } from "@/app/actions/clients";
+import { getProjects } from "@/app/actions/projects";
+import { getProposals } from "@/app/actions/proposals";
 
-export default function DashboardOverview() {
+export default async function DashboardOverview() {
+  // Fetch all collections concurrently to minimize TTFB (Time to First Byte)
+  const [clientsRes, projectsRes, proposalsRes] = await Promise.all([
+    getClients().catch(() => ({ data: [] })),
+    getProjects().catch(() => ({ data: [] })),
+    getProposals().catch(() => ({ data: [], total: 0 })),
+  ]);
+
+  const clients = clientsRes?.data || [];
+  const projects = projectsRes?.data || [];
+  const proposals = proposalsRes?.data || [];
+
+  // 1. Dynamic Total Leads (e.g., clients with 'prospect' status)
+  const prospectsCount = clients.filter((c: any) => c.status === "prospect").length;
+  const totalClientsCount = clients.length;
+
+  // 2. Dynamic Active Projects (e.g., projects that are currently active)
+  const activeProjectsCount = projects.filter((p: any) => p.status === "active" || p.status === "in_progress").length;
+
+  // 3. Dynamic Pipeline Value (Sum of cost from proposals in 'draft' or 'sent' status)
+  const pipelineValue = proposals
+    .filter((p: any) => p.status === "draft" || p.status === "sent")
+    .reduce((sum: number, p: any) => {
+      const costNum = p.cost ? parseFloat(p.cost) : 0;
+      return sum + (isNaN(costNum) ? 0 : costNum);
+    }, 0);
+
+  // Format currency dynamically
+  const formattedPipeline = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(pipelineValue);
+
+  // 4. Dynamic Recent Activity (Total number of items requiring attention)
+  const totalProposalsCount = proposalsRes?.total || proposals.length;
+
   const stats = [
-    { title: "Total Leads", value: "124", icon: Users, trend: "+12% from last month" },
-    { title: "Active Projects", value: "12", icon: Briefcase, trend: "4 closing soon" },
-    { title: "Pipeline Value", value: "$45,200", icon: Sparkles, trend: "+$5.2k this week" },
-    { title: "Recent Activity", value: "24", icon: Activity, trend: "6 pending actions" },
+    {
+      title: "Total Prospects",
+      value: String(prospectsCount),
+      icon: Users,
+      trend: `${totalClientsCount} total records in CRM`
+    },
+    {
+      title: "Active Projects",
+      value: String(activeProjectsCount),
+      icon: Briefcase,
+      trend: `${projects.length - activeProjectsCount} completed or paused`
+    },
+    {
+      title: "Pipeline Value",
+      value: formattedPipeline,
+      icon: Sparkles,
+      trend: "From draft & sent proposals"
+    },
+    {
+      title: "Total Proposals",
+      value: String(totalProposalsCount),
+      icon: Activity,
+      trend: `${proposals.filter((p: any) => p.status === "accepted").length} successfully won`
+    },
   ];
 
   return (
@@ -31,7 +90,6 @@ export default function DashboardOverview() {
         ))}
       </div>
 
-      {/* Placeholder for more dashboard content */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-8">
         <Card className="col-span-4 border-none shadow-sm bg-card aspect-video flex items-center justify-center text-muted-foreground italic">
           [Main Chart Area - Coming Soon]

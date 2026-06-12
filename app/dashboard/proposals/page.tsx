@@ -2,8 +2,14 @@ import { Metadata } from "next";
 import { getProposals } from "@/app/actions/proposals";
 import { ProposalTable } from "@/components/dashboard/proposals/ProposalTable";
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Filter } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { AddProposalDialog } from "@/components/dashboard/proposals/AddProposalDialog";
+
+// TODO: Ensure these actions are built out in your action files to serve the relational inputs
+// (e.g., matching /api/v1/clients and /api/v1/projects endpoints)
+import { getClients } from "@/app/actions/clients";
+import { getProjects } from "@/app/actions/projects";
 
 export const metadata: Metadata = {
   title: "Proposals | Spark CRM",
@@ -23,12 +29,16 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
   const status = params.status || "all";
   const page = Number(params.page) || 1;
 
-  const { data, total, totalPages } = await getProposals({
-    query,
-    status,
-    page,
-    limit: 10,
-  });
+  // FIXED: Concurrent Server Data Fetching via Promise.all for high performance
+  const [proposalsData, clientsData, projectsData] = await Promise.all([
+    getProposals({ query, status, page, limit: 10 }),
+    getClients().catch(() => ({ data: [] })),   // Safeguard fallback if route not integrated yet
+    getProjects().catch(() => ({ data: [] }))   // Safeguard fallback if route not integrated yet
+  ]);
+
+  const proposals = proposalsData?.data || [];
+  const clients = clientsData?.data || [];
+  const projects = projectsData?.data || [];
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -41,10 +51,8 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
           <Button variant="outline" className="rounded-xl border-primary/20 text-primary hover:bg-primary/5">
             AI Generator
           </Button>
-          <Button className="rounded-xl shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90 font-bold">
-            <Plus className="mr-2 h-4 w-4" />
-            New Proposal
-          </Button>
+          {/* FIXED: Passed required collections down into the dialog to resolve compiling crashes */}
+          <AddProposalDialog clients={clients} projects={projects} />
         </div>
       </div>
 
@@ -66,7 +74,8 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
           </div>
         </div>
 
-        <ProposalTable proposals={data} />
+        {/* FIXED: Passed extracted dynamic collection safe array to table layout render pipeline */}
+        <ProposalTable proposals={proposals} />
       </div>
     </div>
   );
