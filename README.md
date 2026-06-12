@@ -6,20 +6,22 @@
 ![Status](https://img.shields.io/badge/status-actively%20maintained-brightgreen.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)
 ![Next.js](https://img.shields.io/badge/nextjs-16.2%2B-black)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![FastAPI](https://img.shields.io/badge/fastapi-0.100%2B-green)
 
 ## 🎯 Overview
 
 Spark CRM is an open-source CRM designed specifically for marketing, design, and development agencies (10-50 people). It solves the problem of bloated enterprise CRMs by offering a minimal, AI-powered solution that lets teams focus on client relationships, not software training.
 
 **Key differentiators:**
-- ⚡ AI-assisted email drafts and proposal generation
+- ⚡ AI-assisted email drafts and proposal generation (Groq LLM backend)
 - 🎨 Minimal, intuitive UI (add a client in <30 seconds)
 - 📊 Smart client health scoring and segmentation
-- 🚀 Built on modern stack: Next.js, Supabase, Vercel AI SDK
+- 🚀 Modern architecture: Next.js frontend + FastAPI backend
 - 📱 Mobile-responsive for field usage
-- 🔐 Row-level security via Supabase RLS policies
+- 🔐 JWT-based authentication with secure API layer
 
-**[Live Demo](https://spark-crm-seven.vercel.app)** | **[Backend Repo](https://github.com/arfin-web/spark-crm-backend)** | **[API Documentation](https://spark-crm-backend-production.up.railway.app/docs)** 
+**[Live Demo](https://spark-crm-seven.vercel.app)** | **[Frontend Repo](https://github.com/arfin-web/spark-crm)** | **[Backend Repo](https://github.com/arfin-web/spark-crm-backend)** | **[API Docs](https://spark-crm-backend-production.up.railway.app/docs)** 
 
 ---
 
@@ -40,16 +42,16 @@ Spark CRM is an open-source CRM designed specifically for marketing, design, and
   - Timeline and deliverable management
 
 - **AI-Powered Features**
-  - ✨ **Email Draft Generator**: Contextual follow-up emails powered by Claude via Groq
+  - ✨ **Email Draft Generator**: Contextual follow-up emails powered by Groq LLM (backend)
   - ✨ **Proposal Generator**: Auto-generate project proposals from brief descriptions
   - Activity logging with timestamps
   - Rich text note taking
 
 - **Authentication & Security**
-  - Clerk Auth (OAuth + Email/Password)
-  - Supabase RLS policies for row-level data isolation
-  - Secure Server Actions for all mutations
-  - HTTPS-only deployment
+  - JWT-based token authentication
+  - Secure API endpoints with role-based access
+  - Password hashing and validation
+  - Refresh token mechanism
 
 - **Dashboard & Analytics**
   - Overview metrics (active clients, project status, pending follow-ups)
@@ -58,10 +60,10 @@ Spark CRM is an open-source CRM designed specifically for marketing, design, and
   - Client health overview
 
 - **Developer Experience**
-  - TypeScript strict mode
-  - Zod validation schemas
-  - React Query for data fetching
-  - ESLint + Prettier configured
+  - TypeScript strict mode (frontend)
+  - Zod validation schemas (frontend)
+  - React Hook Form for form management
+  - FastAPI auto-generated OpenAPI docs
   - Comprehensive error handling
 
 ### 🚧 Roadmap (v1.1+)
@@ -80,18 +82,29 @@ Spark CRM is an open-source CRM designed specifically for marketing, design, and
 
 ## 🏗️ Tech Stack
 
+### Frontend
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| **Frontend** | Next.js 16.2+ (App Router) | React server/client components |
-| **UI** | Shadcn UI + TailwindCSS | Component library + styling |
-| **Database** | Supabase (PostgreSQL) | Data storage + RLS + real-time |
-| **Auth** | Clerk | User authentication + management |
-| **AI** | Vercel AI SDK + Groq | LLM integration for email/proposal generation |
-| **Forms** | React Hook Form + Zod | Type-safe form handling |
-| **Data Fetching** | React Query (TanStack) | Server state management |
+| **Framework** | Next.js 16.2+ (App Router) | React server/client components |
+| **Language** | TypeScript | Type safety |
+| **Styling** | Tailwind CSS 4 | Utility-first CSS |
+| **UI Components** | Shadcn UI | Component library |
+| **Forms** | React Hook Form + Zod | Type-safe form handling & validation |
+| **Data Fetching** | TanStack Query (React Query) | Server state management |
 | **Drag-Drop** | @dnd-kit | Kanban pipeline interactions |
 | **Hosting** | Vercel | Edge deployment + functions |
-| **Language** | TypeScript | Type safety across the stack |
+
+### Backend
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **Framework** | FastAPI (Python 3.10+) | High-performance API |
+| **Language** | Python | Backend logic |
+| **Database** | NeonDB PostgreSQL | Data storage (serverless) |
+| **Authentication** | JWT (PyJWT) | Token-based auth |
+| **ORM** | SQLAlchemy | Database abstraction |
+| **AI Integration** | Groq SDK | LLM inference for email/proposal generation |
+| **Validation** | Pydantic | Data validation |
+| **Hosting** | Railway | Backend deployment |
 
 ---
 
@@ -99,61 +112,46 @@ Spark CRM is an open-source CRM designed specifically for marketing, design, and
 
 ### Prerequisites
 
+**Frontend:**
 - Node.js 18+ 
-- Supabase account (free tier OK)
-- Clerk account (free tier OK)
-- Groq API key (free tier: 14,400 req/day)
-- Git
+- npm or pnpm
 
-### 1. Clone the Repository
+**Backend:**
+- Python 3.10+
+- pip (Python package manager)
+- NeonDB PostgreSQL connection string
+- Groq API key (free tier: 14,400 req/day)
+
+### Frontend Setup
+
+#### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/pitch-crm.git
-cd pitch-crm
+git clone https://github.com/arfin-web/spark-crm.git
+cd spark-crm
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Set Up Environment Variables
+#### 3. Set Up Environment Variables
 
 Create a `.env.local` file:
 
 ```env
-# Clerk Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
+# Backend API
+NEXT_PUBLIC_API_URL=http://localhost:8000
+# or for production: https://spark-crm-backend-production.up.railway.app
 
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxx...
-SUPABASE_SERVICE_KEY=eyJxxx... # Server-side only
-
-# AI - Groq (Free tier: 14,400 req/day)
-GROQ_API_KEY=gsk_...
-
-# Optional: Vercel AI Gateway (for multi-provider support)
-AI_GATEWAY_API_KEY=...
+# Clerk Authentication (if using Clerk, optional)
+# NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+# CLERK_SECRET_KEY=sk_test_...
 ```
 
-### 4. Set Up Supabase
-
-```bash
-# Create tables and apply migrations
-npm run db:migrate
-
-# Or manually import schema from /sql/schema.sql in Supabase dashboard
-```
-
-Apply RLS policies:
-```sql
--- See /sql/rls-policies.sql
-```
-
-### 5. Run Development Server
+#### 4. Run Development Server
 
 ```bash
 npm run dev
@@ -161,136 +159,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 6. Create First User
-
-- Click "Sign Up"
-- Authenticate via Google OAuth or email
-- Complete onboarding (agency name, use case)
-- Start adding clients!
-
----
-
----
-
-## 🤖 AI Features Explained
-
-### Email Draft Generator
-
-Uses **Groq's Llama 3.1 8B** for fast, cost-efficient email generation.
-
-Example:
-Purpose: "follow_up"
-Client: "Acme Design Co."
-Last Activity: "Sent proposal 5 days ago"
-
-Generated:
-Subject: "Following up on your proposal"
-Body: "Hi [client], I hope you've had a chance to review the proposal..."
-```
-
-**Why Groq?**
-- ⚡ 800+ tokens/second (fastest inference)
-- 💰 Free tier: 14,400 requests/day
-- 📉 Scales to $0.05/M tokens after free tier
-- OpenAI-compatible API (easy switching)
-
-### Proposal Generator
-
-Uses **Groq's Llama 3.3 70B** for higher-quality, longer-form content.
-
-```typescript
-// Input: Brief description, client details
-// Output: Structured proposal with scope, timeline, cost
-
-Generates:
-- Deliverables
-- Project timeline
-- Cost estimate
-- Terms & conditions (template)
-```
-
----
-
-## 🔐 Security
-
-- **Authentication**: Clerk handles OAuth and MFA
-- **Database Security**: Supabase RLS policies enforce user-level data isolation
-- **API Security**: All mutations via Server Actions (no exposed endpoints)
-- **Secrets**: Never commit `.env.local`; use Vercel dashboard for prod
-- **HTTPS**: Always enabled on Vercel
-- **Validation**: Zod schemas validate all inputs server-side
-
-Example RLS Policy:
-```sql
-ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "users_can_see_own_clients" ON clients
-  FOR SELECT USING (user_id = auth.uid());
-
-CREATE POLICY "users_can_insert_own_clients" ON clients
-  FOR INSERT WITH CHECK (user_id = auth.uid());
-```
-
----
-
-## 📊 API & Data
-
-### Server Actions (Preferred over REST API)
-
-All data mutations use Server Actions for simplicity and type safety.
-
-```typescript
-// /app/server/actions/clients.ts
-
-'use server'
-
-export async function addClient(data: AddClientInput) {
-  const user = await auth(); // Clerk
-  if (!user) throw new Error('Unauthorized');
-
-  const validated = AddClientSchema.parse(data);
-  const { data: client, error } = await supabase
-    .from('clients')
-    .insert({ user_id: user.id, ...validated })
-    .select()
-    .single();
-
-  if (error) throw new Error(error.message);
-  return client;
-}
-```
-
-### Database Schema
-
-**Key Tables:**
-- `users` (Clerk auth)
-- `clients` (contacts, companies)
-- `projects` (deals, pipelines)
-- `proposals` (AI-generated or manual)
-- `activities` (interaction log)
-- `email_drafts` (AI-generated emails)
-
-[See full schema](./sql/schema.sql)
-
----
-
-## 🧪 Development
-
-### Run Tests (Planned)
-
-```bash
-npm run test
-```
-
-### Linting & Formatting
-
-```bash
-npm run lint          # Run ESLint
-npm run format        # Run Prettier
-npm run type-check    # TypeScript check
-```
-
-### Build for Production
+#### 5. Build for Production
 
 ```bash
 npm run build
@@ -299,13 +168,173 @@ npm start
 
 ---
 
+### Backend Setup
+
+#### 1. Clone Backend Repository
+
+```bash
+git clone https://github.com/arfin-web/spark-crm-backend.git
+cd spark-crm-backend
+```
+
+#### 2. Create Virtual Environment
+
+```bash
+python -m venv venv
+
+# On Windows:
+venv\Scripts\activate
+
+# On macOS/Linux:
+source venv/bin/activate
+```
+
+#### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 4. Set Up Environment Variables
+
+Create a `.env` file:
+
+```env
+# Database
+DATABASE_URL=postgresql://user:password@host:port/dbname
+# NeonDB format: postgresql://user:password@[project-id].neon.tech/[db-name]
+
+# Security
+SECRET_KEY=your-super-secret-jwt-key-change-this-in-production
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# AI - Groq
+GROQ_API_KEY=gsk_...
+
+# CORS
+FRONTEND_URL=http://localhost:3000
+# Production: https://spark-crm-seven.vercel.app
+```
+
+#### 5. Run Database Migrations
+
+```bash
+# Using Alembic (if configured)
+alembic upgrade head
+
+# Or manually create tables via SQL
+# See /sql/schema.sql
+```
+
+#### 6. Run Development Server
+
+```bash
+uvicorn main:app --reload --port 8000
+```
+
+Backend API available at [http://localhost:8000](http://localhost:8000)
+Interactive API docs at [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+## 🤖 AI Features Explained
+
+### Email Draft Generator
+
+Uses **Groq's Llama 3.1 8B** backend integration for fast, cost-efficient email generation.
+
+**Flow:**
+1. Frontend sends client context + email purpose to backend
+2. Backend constructs prompt with client details
+3. Groq LLM generates email in real-time
+4. Response streamed back to frontend
+5. User edits and saves to database
+
+**Example:**
+Purpose: "follow_up"
+Client: "Acme Design Co."
+
+Last Activity: "Sent proposal 5 days ago"
+Generated Email:
+
+Subject: "Following up on your proposal"
+Body: "Hi [client], I hope you've had a chance to review the proposal..."
+
+**Why Groq Backend?**
+- ⚡ 800+ tokens/second (fastest inference)
+- 💰 Free tier: 14,400 requests/day
+- 📉 Scales to $0.05/M tokens after free tier
+- Python SDK integrates seamlessly with FastAPI
+- Cost-efficient processing server-side
+
+## 🔐 Security
+
+- **Authentication**: JWT tokens with access/refresh token pattern
+- **API Security**: Secure endpoints with token validation
+- **Password Security**: Bcrypt hashing for password storage
+- **Secrets**: Environment variables stored in Railway/Vercel dashboards
+- **HTTPS**: Enforced on production deployments
+- **CORS**: Configured to allow only frontend domain
+- **Validation**: Pydantic schemas validate all API inputs
+
+**Full API docs**: [http://localhost:8000/docs](http://localhost:8000/docs) (Swagger UI)
+
+### Database Schema
+
+**Key Tables:**
+- `users` - User accounts with hashed passwords
+- `clients` - Client/contact information
+- `projects` - Deals, pipelines, budgets
+- `proposals` - AI-generated or manual proposals
+- `activities` - Interaction log (emails, calls, meetings)
+- `email_drafts` - AI-generated email drafts
+
+---
+
+## 🧪 Development
+
+### Frontend
+
+```bash
+# Linting & Formatting
+npm run lint          # Run ESLint
+npm run format        # Run Prettier
+npm run type-check    # TypeScript check
+
+# Build & Test
+npm run build         # Production build
+npm run test          # Run tests (when configured)
+```
+
+### Backend
+
+```bash
+# Linting & Type Checking
+python -m flake8 .    # Lint Python code
+python -m mypy .      # Type checking
+
+# Running Server
+uvicorn main:app --reload          # Development
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app  # Production
+
+# Database
+alembic init migrations             # Initialize migrations
+alembic revision --autogenerate     # Generate migration
+alembic upgrade head                # Apply migrations
+```
+
+---
+
 ## 📈 Performance Metrics
 
-- **Lighthouse (Desktop):** 90+ performance
-- **First Contentful Paint:** <2s
-- **Time to Interactive:** <3s
-- **API Response Time:** <500ms (Groq baseline)
-- **Database Queries:** Indexed on `user_id`, `client_id`, `project_id`
+- **Frontend Lighthouse (Desktop):** 90+ performance
+- **Frontend First Contentful Paint:** <2s
+- **Frontend Time to Interactive:** <3s
+- **Backend API Response Time:** <500ms (Groq baseline)
+- **Database Queries:** Indexed on user_id, client_id, project_id
+- **Backend Throughput:** 1000+ concurrent requests (FastAPI + Uvicorn)
 
 ---
 
@@ -315,7 +344,7 @@ Contributions are welcome! We're actively developing new features and appreciate
 
 ### How to Contribute
 
-1. Fork the repository
+1. Fork the repository (frontend or backend)
 2. Create a feature branch: `git checkout -b feature/your-feature`
 3. Make your changes and commit: `git commit -m 'Add feature'`
 4. Push to the branch: `git push origin feature/your-feature`
@@ -332,38 +361,32 @@ Contributions are welcome! We're actively developing new features and appreciate
 
 ### Code Standards
 
+**Frontend:**
 - **TypeScript**: Strict mode required
 - **Formatting**: Prettier + ESLint
 - **Naming**: camelCase for variables, PascalCase for components
-- **Comments**: Document complex logic
-- **Tests**: Add tests for new features
 
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
----
-
-## 💬 Community & Support
-
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/pitch-crm/discussions)
-- **Issues**: [Report bugs here](https://github.com/yourusername/pitch-crm/issues)
-- **Twitter**: [@yourhandle](https://twitter.com/yourhandle)
-- **Email**: support@pitch-crm.app (if applicable)
-
----
+**Backend:**
+- **Python**: PEP 8 compliant
+- **Type Hints**: All functions typed
+- **Docstrings**: Document complex functions
+- **Testing**: Add unit tests for new endpoints
 
 ## 🙏 Acknowledgments
 
 Built with:
+
+**Frontend:**
 - [Next.js](https://nextjs.org/) - React framework
-- [Supabase](https://supabase.com/) - Open-source Firebase
 - [Shadcn UI](https://shadcn-ui.com/) - Component library
-- [Vercel AI SDK](https://sdk.vercel.ai/) - AI integration
+- [TailwindCSS](https://tailwindcss.com/) - Styling
+
+**Backend:**
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
+- [SQLAlchemy](https://sqlalchemy.org/) - ORM
+- [Pydantic](https://docs.pydantic.dev/) - Data validation
 - [Groq](https://groq.com/) - Lightning-fast inference
-- [Clerk](https://clerk.com/) - Authentication
+- [NeonDB](https://neon.tech/) - Serverless PostgreSQL
 
 ---
 
@@ -372,18 +395,18 @@ Built with:
 See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ### v0.9 (Current - MVP)
-- ✅ Core client/project CRUD
-- ✅ Kanban pipeline
-- ✅ AI email & proposal generation
-- ✅ Activity logging
-- ✅ CSV export
+- ✅ Frontend: Client/project CRUD, Kanban pipeline
+- ✅ Backend: FastAPI REST API with JWT auth
+- ✅ AI: Email & proposal generation via Groq
+- ✅ Database: NeonDB PostgreSQL schema
+- ✅ Activity logging & CSV export
 - 🚧 Email sync (in progress)
 
 ### v1.0 (Next)
 - Email calendar integration
 - Slack notifications
 - Team collaboration
-- Advanced filtering
+- Advanced analytics
 
 ---
 
@@ -391,16 +414,21 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 **Development Stage:** MVP (Actively Maintained)
 
-- [x] Phase 1: Foundation & Auth
-- [x] Phase 2: Client Management
-- [x] Phase 3: Project Tracking
-- [x] Phase 4: Activity Logging
-- [x] Phase 5: AI Features
-- [x] Phase 6: Dashboard
-- [x] Phase 7: Settings & Export
-- [x] Phase 8: Error Handling & Performance
-- [ ] Phase 9: Email Integration
-- [ ] Phase 10: Advanced Analytics
+### Frontend
+- [x] Client Management UI
+- [x] Project & Pipeline
+- [x] Dashboard & Overview
+- [x] Settings & Export
+- [x] Error Handling & Performance
+
+### Backend
+- [x] Authentication (JWT)
+- [x] Client API endpoints
+- [x] Project API endpoints
+- [x] AI endpoints (Groq integration)
+- [x] Activity logging
+- [ ] Email sync
+- [ ] Advanced analytics
 
 **Next Milestone:** Email sync + Slack integration (v1.0)
 
@@ -417,11 +445,12 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ## 📚 Documentation
 
-- **[Setup Guide](./docs/SETUP.md)** - Detailed installation
+- **[Frontend Setup Guide](./docs/SETUP.md)** - Detailed installation
+- **[Backend API Docs](https://spark-crm-backend-production.up.railway.app/docs)** - Swagger UI
 - **[Architecture](./docs/ARCHITECTURE.md)** - System design
-- **[AI Integration](./docs/AI.md)** - How Groq & Vercel AI SDK work
-- **[Database](./docs/DATABASE.md)** - Schema & RLS policies
-- **[Deployment](./docs/DEPLOYMENT.md)** - Vercel production setup
+- **[Database Schema](./docs/DATABASE.md)** - NeonDB structure
+- **[Deployment](./docs/DEPLOYMENT.md)** - Vercel + Railway setup
+- **[API Integration](./docs/API.md)** - Frontend-backend communication
 
 ---
 
@@ -459,13 +488,15 @@ See [ROADMAP.md](./docs/ROADMAP.md) for detailed feature plans.
 
 ## 🔗 Links
 
-- **GitHub**: [github.com/arfin-web/spark-crm](https://github.com/arfin-web/spark-crm)
+- **Frontend GitHub**: [github.com/arfin-web/spark-crm](https://github.com/arfin-web/spark-crm)
+- **Backend GitHub**: [github.com/arfin-web/spark-crm-backend](https://github.com/arfin-web/spark-crm-backend)
 - **Live Demo**: [spark-crm.com](https://spark-crm-seven.vercel.app/)
+- **API Docs**: [spark-crm-api.app/docs](https://spark-crm-backend-production.up.railway.app/docs)
 - **Portfolio**: [arfins-portfolio.com](https://arfins-portfolio.vercel.app)
 
 ---
 
 **Made with ❤️ by [Arfin Noor Rahman](https://arfins-portfolio.vercel.app/)**
 
-Last updated: `[June 11, 2026]`  
-Version: `v0.9 (MVP)`
+Last updated: `June 11, 2026`  
+Version: `v0.9 (MVP)`  
