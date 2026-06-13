@@ -3,6 +3,7 @@ import { Sparkles, Users, Briefcase, Activity } from "lucide-react";
 import { getClients } from "@/app/actions/clients";
 import { getProjects } from "@/app/actions/projects";
 import { getProposals } from "@/app/actions/proposals";
+import { MainChart } from "@/components/dashboard/overview/MainChart";
 
 export default async function DashboardOverview() {
   // Fetch all collections concurrently to minimize TTFB (Time to First Byte)
@@ -68,6 +69,12 @@ export default async function DashboardOverview() {
     },
   ];
 
+  const statsForChart = stats.map((stat) => ({
+    title: stat.title,
+    value: stat.value,
+    trend: stat.trend,
+  }));
+
   return (
     <div className="space-y-8">
       <div>
@@ -92,7 +99,7 @@ export default async function DashboardOverview() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-8">
         <Card className="col-span-4 border-none shadow-sm bg-card aspect-video flex items-center justify-center text-muted-foreground italic">
-          [Main Chart Area - Coming Soon]
+          <MainChart statistics={statsForChart} />
         </Card>
         <Card className="col-span-3 border-none shadow-sm bg-card aspect-video flex items-center justify-center text-muted-foreground italic">
           [Recent Activity List - Coming Soon]
